@@ -1,0 +1,136 @@
+/* Container */
+.container {
+  font-family: "Segoe UI", sans-serif;
+  background: #f8f9fb;
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1rem;
+  background-color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Logo */
+.logo {
+  height: 60px;
+}
+
+/* Navigation */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  position: relative;
+}
+
+.navItem {
+  position: relative;
+}
+
+.navText {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* Caret Icon */
+.caret {
+  margin-left: 6px;
+  transition: transform 0.3s ease;
+}
+
+.caretOpen {
+  transform: rotate(180deg);
+}
+
+/* Dropdown */
+.dropdownContainer {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  min-width: 180px;
+  z-index: 10;
+}
+
+.dropdownItem {
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s ease;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.dropdownItem:hover {
+  background-color: #f0f2f5;
+}
+
+/* Login Button */
+.loginButton {
+  background: linear-gradient(to right, #1877cb, #0077fe);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  font-weight: bold;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.loginButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Hero Section */
+.hero {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
+  padding: 6rem 2rem 4rem;
+  text-align: center;
+  margin: 4rem auto;
+  max-width: 900px;
+  box-shadow: 0 4px 40px rgba(0, 0, 0, 0.08);
+}
+
+.heroHeading {
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.heroSubtitle {
+  font-size: 1.125rem;
+  color: #555;
+}
+
+/* Cleaned Data Section */
+.dataPreviewSection {
+  background: #ffffff;
+  padding: 2rem;
+  margin: 2rem;
+  border-radius: 12px;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
+}
+
+.dataPreviewHeading {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
