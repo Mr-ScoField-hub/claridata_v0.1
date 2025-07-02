@@ -1,43 +1,50 @@
-import React, { useEffect } from "react"
-import { useLocation, useNavigate } from "react-router-dom"
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import styles from "./SummaryPage.module.css";
+
+function safeParseJSON(jsonString) {
+    try {
+        if (!jsonString) return null;
+        return JSON.parse(jsonString);
+    } catch {
+        return null;
+    }
+}
 
 export default function SummaryPage() {
-    const location = useLocation()
-    const navigate = useNavigate()
-    const state = location.state
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [cleanedData, setCleanedData] = useState(null);
 
     useEffect(() => {
-        if (!state || !state.cleanedData || state.cleanedData.length === 0) {
-            navigate("/", { replace: true })
+        console.log("Location.state:", location.state);
+        const fromState = location.state?.cleanedData;
+
+        if (fromState) {
+            setCleanedData(fromState);
+        } else {
+            const storedData = sessionStorage.getItem("cleanedData");
+            console.log("Raw sessionStorage cleanedData:", storedData);
+            const parsed = safeParseJSON(storedData);
+            if (parsed) {
+                setCleanedData(parsed);
+            } else {
+                navigate("/"); // no valid data, go home
+            }
         }
-    }, [state, navigate])
+    }, [location.state, navigate]);
 
-    if (!state || !state.cleanedData) return null
-
-    const { cleanedData } = state
-    const columns = Object.keys(cleanedData[0])
+    if (!cleanedData) {
+        return <p className={styles.loading}>Loading cleaned data...</p>;
+    }
 
     return (
-        <div style={{ padding: "2rem" }}>
-            <h1>📋 Data Summary</h1>
-            <table border="1" cellPadding="6" style={{ borderCollapse: "collapse", width: "100%" }}>
-                <thead>
-                    <tr>
-                        {columns.map((col) => (
-                            <th key={col}>{col}</th>
-                        ))}
-                    </tr>
-                </thead>
-                <tbody>
-                    {cleanedData.map((row, i) => (
-                        <tr key={i}>
-                            {columns.map((col) => (
-                                <td key={col}>{row[col]}</td>
-                            ))}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+        <div className={styles.container}>
+            <h1 className={styles.title}>📊 Cleaned Data Summary</h1>
+            <pre className={styles.dataBox}>{JSON.stringify(cleanedData, null, 2)}</pre>
+            <button className={styles.button} onClick={() => navigate("/")}>
+                ⬅️ Back to Home
+            </button>
         </div>
-    )
+    );
 }

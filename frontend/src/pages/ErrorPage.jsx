@@ -9,7 +9,7 @@ export default function ErrorPage() {
     const state = location.state
 
     if (!state) {
-        navigate("/SummaryPage")
+        navigate("/")
         return null
     }
 
