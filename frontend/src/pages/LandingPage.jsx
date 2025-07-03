@@ -132,8 +132,8 @@ export default function LandingPage() {
                             src={Logo}
                             alt="ClariData Logo"
                             className={styles.logoImage}
-                            width={32}
-                            height={32}
+                            width={55}
+                            height={50}
                         />
                     </div>
                     <nav className={styles.nav}>
@@ -153,91 +153,92 @@ export default function LandingPage() {
 
             {/* Hero Section */}
             <main className={styles.main}>
+                {/* ======================= Hero Section ======================= */}
                 <motion.section
                     className={styles.hero}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.7 }}
                 >
-                    <h1 className={styles.title}>
-                        Clean Your CSV Data
-                        <br />
-                        <AnimatePresence mode="wait">
-                            <motion.span
-                                key={animatedWords[wordIndex].text}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -20 }}
-                                transition={{ duration: 0.4 }}
-                                style={{ color: animatedWords[wordIndex].color }}
-                                className={styles.accentText}
-                            >
-                                {animatedWords[wordIndex].text}
-                            </motion.span>
-                        </AnimatePresence>
-                    </h1>
-
-                    {/* Upload Section */}
-                    <motion.div
-                        className={styles.uploadSection}
-                        whileHover={{ scale: 1.02 }}
-                        transition={{ type: "spring", stiffness: 300 }}
-                    >
-                        <div
-                            className={uploadAreaClass}
-                            onDragOver={handleDragOver}
-                            onDragLeave={handleDragLeave}
-                            onDrop={handleDrop}
-                            onClick={() =>
-                                !isLoading && document.getElementById("file-input").click()
-                            }
-                            role="button"
-                            tabIndex={0}
-                            aria-label="Upload CSV file"
-                        >
-                            <AnimatePresence>
-                                {isLoading && (
-                                    <motion.div
-                                        className={styles.loadingOverlay}
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        exit={{ opacity: 0 }}
-                                    >
-                                        <Loader2
-                                            className={`${styles.loadingSpinner} ${styles.spinner}`}
-                                        />
-                                        <div className={styles.loadingText}>Processing your file...</div>
-                                        <div className={styles.loadingSubtext}>
-                                            Analyzing and cleaning data
-                                        </div>
-                                    </motion.div>
-                                )}
+                    <div className={styles.heroContent}>
+                        <h1 className={styles.title}>
+                            Clean Your CSV Data
+                            <br />
+                            <AnimatePresence mode="wait">
+                                <motion.span
+                                    key={animatedWords[wordIndex].text}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
+                                    transition={{ duration: 0.4 }}
+                                    style={{ color: animatedWords[wordIndex].color }}
+                                    className={styles.accentText}
+                                >
+                                    {animatedWords[wordIndex].text}
+                                </motion.span>
                             </AnimatePresence>
+                        </h1>
 
-                            <Upload className={styles.uploadIcon} />
-                            <div className={styles.uploadText}>
-                                {isLoading ? "Processing..." : "Drop your CSV file here"}
-                            </div>
-                            <div className={styles.uploadSubtext}>
-                                {isLoading
-                                    ? "Please wait..."
-                                    : "or click to browse and select a file"}
-                            </div>
+                        {/* Upload Section */}
+                        <motion.div
+                            className={styles.uploadSection}
+                            whileHover={{ scale: 1.02 }}
+                            transition={{ type: "spring", stiffness: 300 }}
+                        >
+                            <div
+                                className={uploadAreaClass}
+                                onDragOver={handleDragOver}
+                                onDragLeave={handleDragLeave}
+                                onDrop={handleDrop}
+                                onClick={() => !isLoading && document.getElementById("file-input").click()}
+                                role="button"
+                                tabIndex={0}
+                                aria-label="Upload CSV file"
+                            >
+                                <AnimatePresence>
+                                    {isLoading && (
+                                        <motion.div
+                                            className={styles.loadingOverlay}
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                        >
+                                            <Loader2 className={`${styles.loadingSpinner} ${styles.spinner}`} />
+                                            <div className={styles.loadingText}>Processing your file...</div>
+                                            <div className={styles.loadingSubtext}>Analyzing and cleaning data</div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
 
-                            <input
-                                id="file-input"
-                                type="file"
-                                accept=".csv"
-                                onChange={handleFileUpload}
-                                className={styles.hiddenInput}
-                                disabled={isLoading}
-                                aria-label="CSV file input"
-                            />
-                        </div>
-                    </motion.div>
+                                <Upload className={styles.uploadIcon} />
+                                <div className={styles.uploadText}>
+                                    {isLoading ? "Processing..." : "Drop your CSV file here"}
+                                </div>
+                                <div className={styles.uploadSubtext}>
+                                    {isLoading ? "Please wait..." : "or click to browse and select a file"}
+                                </div>
+
+                                <input
+                                    id="file-input"
+                                    type="file"
+                                    accept=".csv"
+                                    onChange={handleFileUpload}
+                                    className={styles.hiddenInput}
+                                    disabled={isLoading}
+                                    aria-label="CSV file input"
+                                />
+                            </div>
+                        </motion.div>
+                    </div>
                 </motion.section>
 
-                {/* Features Section */}
+                {/* ======================= Insights Section ======================= */}
+                <section className={styles.insights}>
+                    <h2 className={styles.sectionTitle}>See your business grow with clear data insights</h2>
+                    <p className={styles.sectionSubtext}>Example: <strong>+R 3 830 Revenue increase this month</strong> just by cleaning and validating existing customer data. 🔥</p>
+                </section>
+
+                {/* ======================= Features Section ======================= */}
                 <section className={styles.features} id="features">
                     {[
                         {
@@ -271,7 +272,7 @@ export default function LandingPage() {
                     ))}
                 </section>
 
-                {/* Testimonials Section */}
+                {/* ======================= Testimonials Section ======================= */}
                 <section className={styles.testimonials} id="testimonials">
                     <motion.h2
                         className={styles.sectionTitle}
@@ -282,6 +283,7 @@ export default function LandingPage() {
                     >
                         What Our Users Say
                     </motion.h2>
+
                     <div className={styles.testimonialGrid}>
                         {testimonials.map(({ name, role, quote, rating }, index) => (
                             <motion.div
@@ -307,6 +309,7 @@ export default function LandingPage() {
                     </div>
                 </section>
             </main>
+
 
             {/* Footer */}
             <footer className={styles.footer} id="contact">
