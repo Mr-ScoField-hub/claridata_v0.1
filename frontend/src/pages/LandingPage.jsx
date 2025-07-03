@@ -11,7 +11,7 @@ export default function LandingPage() {
     const [isHovering, setIsHovering] = useState(false)
     const navigate = useNavigate()
 
-    // 🔥 animated text states
+    // Animated words for header
     const animatedWords = [
         { text: "Effortlessly", color: "#1578fa" },
         { text: "Fast", color: "#e63946" },
@@ -27,9 +27,17 @@ export default function LandingPage() {
         return () => clearInterval(interval)
     }, [])
 
+    const allowedTypes = [
+        "text/csv",
+        "application/vnd.ms-excel",
+        "application/csv",
+        "", // sometimes empty string
+    ]
+
     const handleFileUpload = async (e) => {
         const selectedFile = e.target.files?.[0]
-        if (!selectedFile || isLoading || selectedFile.type !== "text/csv") {
+
+        if (!selectedFile || isLoading || !allowedTypes.includes(selectedFile.type)) {
             alert("Please select a valid CSV file")
             return
         }
@@ -86,7 +94,12 @@ export default function LandingPage() {
         if (isLoading) return
 
         const droppedFile = e.dataTransfer.files[0]
-        if (droppedFile && droppedFile.type === "text/csv") {
+        const isCsv =
+            droppedFile &&
+            (allowedTypes.includes(droppedFile.type) ||
+                droppedFile.name.toLowerCase().endsWith(".csv"))
+
+        if (isCsv) {
             handleFileUpload({ target: { files: [droppedFile] } })
         } else {
             alert("Please drop a valid CSV file")
@@ -128,13 +141,7 @@ export default function LandingPage() {
                     transition={{ duration: 0.5 }}
                 >
                     <div className={styles.logo}>
-                        <img
-                            src={Logo}
-                            alt="ClariData Logo"
-                            className={styles.logoImage}
-                            width={55}
-                            height={50}
-                        />
+                        <img src={Logo} alt="ClariData Logo" className={styles.logoImage} width={55} height={50} />
                     </div>
                     <nav className={styles.nav}>
                         <a className={styles.navLink} href="#features">
@@ -153,7 +160,6 @@ export default function LandingPage() {
 
             {/* Hero Section */}
             <main className={styles.main}>
-                {/* ======================= Hero Section ======================= */}
                 <motion.section
                     className={styles.hero}
                     initial={{ opacity: 0 }}
@@ -211,9 +217,7 @@ export default function LandingPage() {
                                 </AnimatePresence>
 
                                 <Upload className={styles.uploadIcon} />
-                                <div className={styles.uploadText}>
-                                    {isLoading ? "Processing..." : "Drop your CSV file here"}
-                                </div>
+                                <div className={styles.uploadText}>{isLoading ? "Processing..." : "Drop your CSV file here"}</div>
                                 <div className={styles.uploadSubtext}>
                                     {isLoading ? "Please wait..." : "or click to browse and select a file"}
                                 </div>
@@ -232,8 +236,7 @@ export default function LandingPage() {
                     </div>
                 </motion.section>
 
-                {/* ======================= Insights Section ======================= */}
-
+                {/* Insights Section */}
                 <section className={styles.insights}>
                     <motion.h2
                         className={styles.sectionTitle}
@@ -254,8 +257,7 @@ export default function LandingPage() {
                     </motion.p>
                 </section>
 
-
-                {/* ======================= Features Section ======================= */}
+                {/* Features Section */}
                 <section className={styles.features} id="features">
                     {[
                         {
@@ -289,7 +291,7 @@ export default function LandingPage() {
                     ))}
                 </section>
 
-                {/* ======================= Testimonials Section ======================= */}
+                {/* Testimonials Section */}
                 <section className={styles.testimonials} id="testimonials">
                     <motion.h2
                         className={styles.sectionTitle}
@@ -327,7 +329,6 @@ export default function LandingPage() {
                 </section>
             </main>
 
-
             {/* Footer */}
             <footer className={styles.footer} id="contact">
                 <motion.div
@@ -338,13 +339,7 @@ export default function LandingPage() {
                     viewport={{ once: true }}
                 >
                     <div className={styles.footerSection}>
-                        <img
-                            src={Logo}
-                            alt="ClariData Logo"
-                            className={styles.footerLogo}
-                            width={32}
-                            height={32}
-                        />
+                        <img src={Logo} alt="ClariData Logo" className={styles.footerLogo} width={32} height={32} />
                         <p className={styles.footerDescription}>
                             ClariData: Your solution for effortless CSV data cleaning and preparation.
                         </p>
@@ -372,5 +367,5 @@ export default function LandingPage() {
                 </div>
             </footer>
         </div>
-    );
+    )
 }
