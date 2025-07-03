@@ -233,10 +233,27 @@ export default function LandingPage() {
                 </motion.section>
 
                 {/* ======================= Insights Section ======================= */}
+
                 <section className={styles.insights}>
-                    <h2 className={styles.sectionTitle}>See your business grow with clear data insights</h2>
-                    <p className={styles.sectionSubtext}>Example: <strong>+R 3 830 Revenue increase this month</strong> just by cleaning and validating existing customer data. 🔥</p>
+                    <motion.h2
+                        className={styles.sectionTitle}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}
+                    >
+                        See your business grow with clear data insights
+                    </motion.h2>
+
+                    <motion.p
+                        className={styles.sectionSubtext}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+                    >
+                        Example: <strong>+R 3 830 Revenue increase this month</strong> just by cleaning and validating existing customer data. 🔥
+                    </motion.p>
                 </section>
+
 
                 {/* ======================= Features Section ======================= */}
                 <section className={styles.features} id="features">
