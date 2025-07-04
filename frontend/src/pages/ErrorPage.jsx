@@ -1,19 +1,22 @@
-import React from "react"
-import { useLocation, useNavigate } from "react-router-dom"
-import { XCircle } from "lucide-react"
-import styles from "./ErrorPage.module.css"
+import React, { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { XCircle } from "lucide-react";
+import styles from "./ErrorPage.module.css";
 
 export default function ErrorPage() {
-    const location = useLocation()
-    const navigate = useNavigate()
-    const state = location.state
+    const location = useLocation();
+    const navigate = useNavigate();
+    const state = location.state;
 
-    if (!state) {
-        navigate("/")
-        return null
-    }
+    useEffect(() => {
+        if (!state) {
+            navigate("/");
+        }
+    }, [state, navigate]);
 
-    const { errors, cleanedData } = state
+    if (!state) return null;
+
+    const { errors, cleanedData } = state;
 
     return (
         <div className={styles.container}>
@@ -38,13 +41,12 @@ export default function ErrorPage() {
             <button
                 className={styles.button}
                 onClick={() => {
-                    // Save to sessionStorage to persist on refresh
-                    sessionStorage.setItem("cleanedData", JSON.stringify(cleanedData))
-                    navigate("/summary")
+                    sessionStorage.setItem("cleanedData", JSON.stringify(cleanedData));
+                    navigate("/summary", { state: { cleanedData } });
                 }}
             >
                 Fix & View Summary
             </button>
         </div>
-    )
+    );
 }

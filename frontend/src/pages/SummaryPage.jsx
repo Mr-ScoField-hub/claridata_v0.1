@@ -17,19 +17,20 @@ export default function SummaryPage() {
     const [cleanedData, setCleanedData] = useState(null);
 
     useEffect(() => {
-        console.log("Location.state:", location.state);
         const fromState = location.state?.cleanedData;
 
         if (fromState) {
             setCleanedData(fromState);
         } else {
             const storedData = sessionStorage.getItem("cleanedData");
-            console.log("Raw sessionStorage cleanedData:", storedData);
             const parsed = safeParseJSON(storedData);
+
             if (parsed) {
                 setCleanedData(parsed);
             } else {
-                navigate("/"); // no valid data, go home
+                setTimeout(() => {
+                    navigate("/");
+                }, 0);
             }
         }
     }, [location.state, navigate]);
@@ -41,7 +42,27 @@ export default function SummaryPage() {
     return (
         <div className={styles.container}>
             <h1 className={styles.title}>📊 Cleaned Data Summary</h1>
-            <pre className={styles.dataBox}>{JSON.stringify(cleanedData, null, 2)}</pre>
+
+            {/* Render table view */}
+            <table className={styles.dataTable}>
+                <thead>
+                    <tr>
+                        {Object.keys(cleanedData[0]).map((key) => (
+                            <th key={key}>{key}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {cleanedData.map((row, idx) => (
+                        <tr key={idx}>
+                            {Object.values(row).map((val, i) => (
+                                <td key={i}>{val}</td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
             <button className={styles.button} onClick={() => navigate("/")}>
                 ⬅️ Back to Home
             </button>
