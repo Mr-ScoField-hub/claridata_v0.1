@@ -4,6 +4,7 @@ import { Upload, Loader2, FileText, BarChart3, Shield, Star } from "lucide-react
 import { useNavigate } from "react-router-dom"
 import styles from "./LandingPage.module.css"
 import Logo from "../assets/Logo/main_logo.png"
+import SalesImg from "../assets/Image/SalesData.png"
 
 export default function LandingPage() {
     const [file, setFile] = useState(null)
@@ -237,24 +238,16 @@ export default function LandingPage() {
                 </motion.section>
 
                 {/* Insights Section */}
-                <section className={styles.insights}>
-                    <motion.h2
-                        className={styles.sectionTitle}
-                        initial={{ opacity: 0, y: 30 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, ease: "easeOut" }}
-                    >
-                        See your business grow with clear data insights
-                    </motion.h2>
-
-                    <motion.p
-                        className={styles.sectionSubtext}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-                    >
-                        Example: <strong>+R 3 830 Revenue increase this month</strong> just by cleaning and validating existing customer data. 🔥
-                    </motion.p>
+                <section className={styles.insightsImage}>
+                    <motion.img
+                        src={SalesImg}
+                        alt="Sales data flow from customer to POS to CSV"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        height={640}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                        className={styles.salesDataImage}
+                    />
                 </section>
 
                 {/* Features Section */}
