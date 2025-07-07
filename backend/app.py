@@ -9,7 +9,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all for dev. Restrict in production.
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -30,11 +30,14 @@ async def upload_csv(file: UploadFile = File(...)):
     file_path = os.path.join(UPLOAD_DIR, f"{uuid.uuid4()}.csv")
 
     try:
-        # Save uploaded file temporarily
         with open(file_path, "wb") as buffer:
             buffer.write(await file.read())
 
-        df = pd.read_csv(file_path)
+        # Try reading with UTF-8 first, fallback to latin1 if fails
+        try:
+            df = pd.read_csv(file_path, encoding="utf-8")
+        except UnicodeDecodeError:
+            df = pd.read_csv(file_path, encoding="latin1")
 
         missing_values = []
         for col in df.columns:
@@ -52,7 +55,6 @@ async def upload_csv(file: UploadFile = File(...)):
                 data_type_issues.append(f"{col}: error inferring type ({e})")
 
         errors = missing_values + data_type_issues
-
         cleaned_data = df.fillna("").to_dict(orient="records")
 
         os.remove(file_path)
@@ -66,4 +68,4 @@ async def upload_csv(file: UploadFile = File(...)):
 
 @app.get("/")
 async def root():
-    return {"message": "ClariData API running ✅"}
+    return {"message": "Data Cleaning API running"}

@@ -7,7 +7,7 @@ import Logo from "../assets/Logo/main_logo.png"
 import SalesImg from "../assets/Image/SalesData.png"
 
 export default function LandingPage() {
-    const [file, setFile] = useState(null)
+    const [, setFile] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [isHovering, setIsHovering] = useState(false)
     const navigate = useNavigate()
@@ -25,8 +25,9 @@ export default function LandingPage() {
         const interval = setInterval(() => {
             setWordIndex((prev) => (prev + 1) % animatedWords.length)
         }, 2000)
+
         return () => clearInterval(interval)
-    }, [])
+    }, [animatedWords.length])
 
     const allowedTypes = [
         "text/csv",
@@ -35,11 +36,19 @@ export default function LandingPage() {
         "", // sometimes empty string
     ]
 
+    // Max upload size: 5MB (adjust as needed)
+    const MAX_FILE_SIZE = 100 * 1024 * 1024
+
     const handleFileUpload = async (e) => {
         const selectedFile = e.target.files?.[0]
 
         if (!selectedFile || isLoading || !allowedTypes.includes(selectedFile.type)) {
             alert("Please select a valid CSV file")
+            return
+        }
+
+        if (selectedFile.size > MAX_FILE_SIZE) {
+            alert("File is too large. Maximum allowed size is 100MB.")
             return
         }
 
@@ -57,7 +66,13 @@ export default function LandingPage() {
 
             if (!res.ok) {
                 const text = await res.text()
-                alert(`Upload failed: ${text}`)
+                if (text.toLowerCase().includes("quota")) {
+                    alert(
+                        "Upload failed: Server storage quota exceeded. Please try again later or contact support."
+                    )
+                } else {
+                    alert(`Upload failed: ${text}`)
+                }
                 setFile(null)
                 setIsLoading(false)
                 return
@@ -65,11 +80,15 @@ export default function LandingPage() {
 
             const data = await res.json()
 
-            if (data.errors && data.errors.length > 0) {
-                navigate("/errors", { state: { errors: data.errors } })
+            const errors = data.errors || []
+            const cleanedData = data.cleaned_data || []
+
+            if (errors.length > 0) {
+                navigate("/errors", { state: { errors, cleanedData } })  // Pass cleanedData here too
             } else {
-                navigate("/summary", { state: { cleanedData: data.cleaned_data } })
+                navigate("/summary", { state: { cleanedData } })
             }
+
         } catch (error) {
             alert(`Upload failed: ${error.message}`)
         } finally {
@@ -100,11 +119,17 @@ export default function LandingPage() {
             (allowedTypes.includes(droppedFile.type) ||
                 droppedFile.name.toLowerCase().endsWith(".csv"))
 
-        if (isCsv) {
-            handleFileUpload({ target: { files: [droppedFile] } })
-        } else {
+        if (!isCsv) {
             alert("Please drop a valid CSV file")
+            return
         }
+
+        if (droppedFile.size > MAX_FILE_SIZE) {
+            alert("File is too large. Maximum allowed size is 5MB.")
+            return
+        }
+
+        handleFileUpload({ target: { files: [droppedFile] } })
     }
 
     const uploadAreaClass = `${styles.uploadArea} ${isHovering && !isLoading ? styles.uploadAreaHover : ""
@@ -142,7 +167,13 @@ export default function LandingPage() {
                     transition={{ duration: 0.5 }}
                 >
                     <div className={styles.logo}>
-                        <img src={Logo} alt="ClariData Logo" className={styles.logoImage} width={55} height={50} />
+                        <img
+                            src={Logo}
+                            alt="ClariData Logo"
+                            className={styles.logoImage}
+                            width={55}
+                            height={50}
+                        />
                     </div>
                     <nav className={styles.nav}>
                         <a className={styles.navLink} href="#features">
@@ -197,7 +228,9 @@ export default function LandingPage() {
                                 onDragOver={handleDragOver}
                                 onDragLeave={handleDragLeave}
                                 onDrop={handleDrop}
-                                onClick={() => !isLoading && document.getElementById("file-input").click()}
+                                onClick={() =>
+                                    !isLoading && document.getElementById("file-input").click()
+                                }
                                 role="button"
                                 tabIndex={0}
                                 aria-label="Upload CSV file"
@@ -210,17 +243,27 @@ export default function LandingPage() {
                                             animate={{ opacity: 1 }}
                                             exit={{ opacity: 0 }}
                                         >
-                                            <Loader2 className={`${styles.loadingSpinner} ${styles.spinner}`} />
-                                            <div className={styles.loadingText}>Processing your file...</div>
-                                            <div className={styles.loadingSubtext}>Analyzing and cleaning data</div>
+                                            <Loader2
+                                                className={`${styles.loadingSpinner} ${styles.spinner}`}
+                                            />
+                                            <div className={styles.loadingText}>
+                                                Processing your file...
+                                            </div>
+                                            <div className={styles.loadingSubtext}>
+                                                Analyzing and cleaning data
+                                            </div>
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
 
                                 <Upload className={styles.uploadIcon} />
-                                <div className={styles.uploadText}>{isLoading ? "Processing..." : "Drop your CSV file here"}</div>
+                                <div className={styles.uploadText}>
+                                    {isLoading ? "Processing..." : "Drop your CSV file here"}
+                                </div>
                                 <div className={styles.uploadSubtext}>
-                                    {isLoading ? "Please wait..." : "or click to browse and select a file"}
+                                    {isLoading
+                                        ? "Please wait..."
+                                        : "or click to browse and select a file"}
                                 </div>
 
                                 <input
@@ -256,17 +299,20 @@ export default function LandingPage() {
                         {
                             Icon: FileText,
                             title: "CSV Processing",
-                            description: "Automatically detect and handle various CSV formats and delimiters",
+                            description:
+                                "Automatically detect and handle various CSV formats and delimiters",
                         },
                         {
                             Icon: Shield,
                             title: "Data Validation",
-                            description: "Identify inconsistencies, missing values, and formatting issues",
+                            description:
+                                "Identify inconsistencies, missing values, and formatting issues",
                         },
                         {
                             Icon: BarChart3,
                             title: "Clean Output",
-                            description: "Get standardized, analysis-ready data with detailed error reports",
+                            description:
+                                "Get standardized, analysis-ready data with detailed error reports",
                         },
                     ].map(({ Icon, title, description }, index) => (
                         <motion.div
@@ -308,7 +354,11 @@ export default function LandingPage() {
                             >
                                 <div className={styles.testimonialRating}>
                                     {Array.from({ length: rating }).map((_, i) => (
-                                        <Star key={i} className={styles.starIcon} fill="#facc15" />
+                                        <Star
+                                            key={i}
+                                            className={styles.starIcon}
+                                            fill="#facc15"
+                                        />
                                     ))}
                                 </div>
                                 <p className={styles.testimonialQuote}>"{quote}"</p>
@@ -332,9 +382,16 @@ export default function LandingPage() {
                     viewport={{ once: true }}
                 >
                     <div className={styles.footerSection}>
-                        <img src={Logo} alt="ClariData Logo" className={styles.footerLogo} width={32} height={32} />
+                        <img
+                            src={Logo}
+                            alt="ClariData Logo"
+                            className={styles.footerLogo}
+                            width={32}
+                            height={32}
+                        />
                         <p className={styles.footerDescription}>
-                            ClariData: Your solution for effortless CSV data cleaning and preparation.
+                            ClariData: Your solution for effortless CSV data cleaning and
+                            preparation.
                         </p>
                     </div>
                     <div className={styles.footerSection}>
