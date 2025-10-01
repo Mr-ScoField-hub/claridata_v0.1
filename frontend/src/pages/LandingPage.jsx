@@ -12,7 +12,6 @@ export default function LandingPage() {
     const [isHovering, setIsHovering] = useState(false)
     const navigate = useNavigate()
 
-    // Animated words for header
     const animatedWords = [
         { text: "Effortlessly", color: "#1578fa" },
         { text: "Fast", color: "#e63946" },
@@ -33,10 +32,9 @@ export default function LandingPage() {
         "text/csv",
         "application/vnd.ms-excel",
         "application/csv",
-        "", // sometimes empty string
+        "", 
     ]
 
-    // Max upload size: 5MB (adjust as needed)
     const MAX_FILE_SIZE = 100 * 1024 * 1024
 
     const handleFileUpload = async (e) => {
@@ -84,7 +82,7 @@ export default function LandingPage() {
             const cleanedData = data.cleaned_data || []
 
             if (errors.length > 0) {
-                navigate("/errors", { state: { errors, cleanedData } })  // Pass cleanedData here too
+                navigate("/errors", { state: { errors, cleanedData } })
             } else {
                 navigate("/summary", { state: { cleanedData } })
             }
@@ -190,7 +188,7 @@ export default function LandingPage() {
                 </motion.div>
             </header>
 
-            {/* Hero Section */}
+           
             <main className={styles.main}>
                 <motion.section
                     className={styles.hero}
@@ -217,7 +215,7 @@ export default function LandingPage() {
                             </AnimatePresence>
                         </h1>
 
-                        {/* Upload Section */}
+                       
                         <motion.div
                             className={styles.uploadSection}
                             whileHover={{ scale: 1.02 }}
@@ -280,7 +278,6 @@ export default function LandingPage() {
                     </div>
                 </motion.section>
 
-                {/* Insights Section */}
                 <section className={styles.insightsImage}>
                     <motion.img
                         src={SalesImg}
@@ -293,7 +290,6 @@ export default function LandingPage() {
                     />
                 </section>
 
-                {/* Features Section */}
                 <section className={styles.features} id="features">
                     {[
                         {
@@ -329,8 +325,6 @@ export default function LandingPage() {
                         </motion.div>
                     ))}
                 </section>
-
-                {/* Testimonials Section */}
                 <section className={styles.testimonials} id="testimonials">
                     <motion.h2
                         className={styles.sectionTitle}
@@ -372,7 +366,6 @@ export default function LandingPage() {
                 </section>
             </main>
 
-            {/* Footer */}
             <footer className={styles.footer} id="contact">
                 <motion.div
                     className={styles.footerContent}
@@ -409,7 +402,7 @@ export default function LandingPage() {
                     <div className={styles.footerSection}>
                         <h4 className={styles.footerTitle}>Contact Us</h4>
                         <p className={styles.footerContact}>Email: support@claridata.com</p>
-                        <p className={styles.footerContact}>Phone: +1 (555) 123-4567</p>
+                        <p className={styles.footerContact}>Phone: 0712233272</p>
                     </div>
                 </motion.div>
                 <div className={styles.footerBottom}>

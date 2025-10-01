@@ -33,7 +33,6 @@ async def upload_csv(file: UploadFile = File(...)):
         with open(file_path, "wb") as buffer:
             buffer.write(await file.read())
 
-        # Try reading with UTF-8 first, fallback to latin1 if fails
         try:
             df = pd.read_csv(file_path, encoding="utf-8")
         except UnicodeDecodeError:

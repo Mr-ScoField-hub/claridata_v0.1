@@ -75,7 +75,7 @@ export default function ErrorPage() {
                         alert("Cannot proceed — cleaned data is invalid or missing.");
                     }
                 }}
-                disabled={!cleanedData || (hasErrors && errors.length === 0)} // disable if no cleanedData or weird error state
+                disabled={!cleanedData || (hasErrors && errors.length === 0)}
             >
                 {hasErrors ? "Fix & View Summary" : "View Summary"}
             </button>
